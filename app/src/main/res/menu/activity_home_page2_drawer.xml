@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_library_books_black_24dp"
+            android:title="Duty Pending" />
+
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_assignment_ind_black_24dp"
+            android:title="Jobs Completed" />
+
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="Equipments" />
+
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_payment_black_24dp"
+            android:title="Payments" />
+
+        <item
+            android:id="@+id/nav_request"
+            android:icon="@drawable/ic_content_paste_black_24dp"
+            android:title="Request" />
+
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_call_black_24dp"
+            android:title="Support" />
+
+</menu>

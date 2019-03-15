@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#413b91</color>
+    <color name="colorPrimaryDark">#6d1b7b</color>
+    <color name="secondaryColor">#ffa726</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="error">#c4001d</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="grey">#c4bebe</color>
+    <color name="success">#10fa10</color>
+
+    <color name="background">#16365C</color>
+
+    <color name="button_color">#1B66EA</color>
+
+    <color name="orange">#ff8800</color>
+
+
+</resources>
