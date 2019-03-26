@@ -2,6 +2,7 @@ package com.example.rahul.technicial_side_app;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,6 +47,7 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
     LocationManager locationManager;
     User user;
     LatLng mypos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
     }
 
     public void startService(View view) {
+
         new uploadCustomersNewLocation(mypos, cust.getId());
         //Intent i=new Intent(this,start_service.class);
         Intent i = new Intent(this, otp.class);

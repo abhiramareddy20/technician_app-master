@@ -160,12 +160,12 @@ public class HomePage extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_request) {
+        }  else if (id == R.id.nav_send) {
+            startActivity(new Intent(HomePage.this,TechniciansRegister.class));
+        }
+        else if(id == R.id.request){
             Intent i = new Intent(HomePage.this,RequestActivity.class);
             startActivity(i);
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -387,6 +387,7 @@ public class HomePage extends AppCompatActivity
 
                 arr.put(obj);
                 Log.e("dataa", googleDirectionsUrl.toString());
+
 
 
             }

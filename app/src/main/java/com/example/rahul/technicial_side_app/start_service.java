@@ -2,6 +2,7 @@ package com.example.rahul.technicial_side_app;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 //7026606333
 public class start_service extends AppCompatActivity{
 
-
+    private Button find,create;
     public static final int REQUEST_CODE_QR_SCAN = 100;
     public static final int PERMISSION_REQUEST = 200;
     int minutes=0,seconds=0;
@@ -50,36 +52,19 @@ public class start_service extends AppCompatActivity{
     Customer customer;
     private CardView qrcode,imageCapture;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_service);
 
-        img     = findViewById(R.id.imageView4);
-        qrcode  = findViewById(R.id.qrcode);
-        imageCapture = findViewById(R.id.camera);
+        find = findViewById(R.id.search);
+        create = findViewById(R.id.createClient);
 
 
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},PERMISSION_REQUEST);
         }
-
-       qrcode.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent i = new Intent(start_service.this,ScanActivity.class);
-               startActivity(i);
-
-           }
-       });
-
-        imageCapture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivity(intent);
-            }
-        });
         customer=(Customer)getIntent().getExtras().get("customer");
 
         timer=findViewById(R.id.timer);
@@ -94,11 +79,6 @@ public class start_service extends AppCompatActivity{
 
     }
 
-    public void onScanSpareEquipment(View view)
-    {
-        /*Intent i = new Intent(this,QrCodeActivity.class);
-        startActivityForResult( i,REQUEST_CODE_QR_SCAN);*/
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -239,6 +219,13 @@ public class start_service extends AppCompatActivity{
         }
     }
 
+    public void search(View view) {
+        startActivity(new Intent(start_service.this, QRCode.class));
+    }
+
+    public void createClient(View view) {
+        startActivity(new Intent(start_service.this,CreateClient.class));
+    }
 
     class DownloadData extends AsyncTask<String , Void ,String>
     {

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_library_books_black_24dp"
@@ -25,13 +24,12 @@
             android:title="Payments" />
 
         <item
-            android:id="@+id/nav_request"
-            android:icon="@drawable/ic_content_paste_black_24dp"
-            android:title="Request" />
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_pageview_black_24dp"
+            android:title="Register" />
 
         <item
-            android:id="@+id/nav_send"
-            android:icon="@drawable/ic_call_black_24dp"
-            android:title="Support" />
-
+            android:id="@+id/request"
+            android:icon="@drawable/ic_pageview_black_24dp"
+            android:title="Request" />
 </menu>

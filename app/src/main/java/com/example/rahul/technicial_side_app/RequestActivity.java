@@ -1,139 +1,95 @@
 package com.example.rahul.technicial_side_app;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class RequestActivity extends AppCompatActivity implements  Spinner.OnItemSelectedListener{
+import static java.security.AccessController.getContext;
 
-    private Spinner spinner;
+public class RequestActivity extends AppCompatActivity  {
 
-    //An ArrayList for Spinner Items
-    private ArrayList<String> students;
+    private ArrayList<ExampleItem> mExampleList;
 
-    //JSON Array
-    private JSONArray result;
-
-    Button search;
-    EditText userEnteredCode;
-    TextView text;
+    private RecyclerView mRecyclerView;
+    private ExampleAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request);
+        setContentView(R.layout.activity_search);
 
-        students = new ArrayList<String>();
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>Request Activity </font>"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        createExampleList();
+        buildRecyclerView();
 
-        spinner = (Spinner) findViewById(R.id.spinner);
-        userEnteredCode = (EditText) findViewById(R.id.code);
-        search = (Button) findViewById(R.id.search);
-
-        spinner.setOnItemSelectedListener(this);
-        getData();
-
-
-        search.setOnClickListener(new View.OnClickListener() {
+        EditText editText = findViewById(R.id.edittext);
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                String code = userEnteredCode.getText().toString().trim();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                if(TextUtils.isEmpty(code))
-                {
-                    Toast.makeText(RequestActivity.this, "Please fill all the details", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            }
 
-                Toast.makeText(RequestActivity.this, "Submitted", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
             }
         });
 
     }
 
-    private void getData(){
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(dataForSpinner.DATA_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject j = null;
-                        try {
-                            //Parsing the fetched Json String to JSON Object
-                            j = new JSONObject(response);
+    private void filter(String text) {
+        ArrayList<ExampleItem> filteredList = new ArrayList<>();
 
-                            //Storing the Array of JSON String to our JSON Array
-                            result = j.getJSONArray(dataForSpinner.JSON_ARRAY);
-
-                            //Calling method getStudents to get the students from the JSON Array
-                            getStudents(result);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-
-        //Creating a request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
-    }
-
-    private void getStudents(JSONArray j){
-        //Traversing through all the items in the json array
-        for(int i=0;i<j.length();i++){
-            try {
-                //Getting json object
-                JSONObject json = j.getJSONObject(i);
-
-                //Adding the name of the student to array list
-                students.add(json.getString(dataForSpinner.TAG_USERNAME));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        for (ExampleItem item : mExampleList) {
+            if (item.getText1().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
             }
         }
 
-        //Setting adapter to show the items in the spinner
-        spinner.setAdapter(new ArrayAdapter<String>(RequestActivity.this, android.R.layout.simple_spinner_dropdown_item, students));
+        mAdapter.filterList(filteredList);
+    }
+
+    private void createExampleList() {
+        mExampleList = new ArrayList<>();
+        mExampleList.add(new ExampleItem( "One"));
+        mExampleList.add(new ExampleItem( "Two"));
+        mExampleList.add(new ExampleItem( "Three"));
+        mExampleList.add(new ExampleItem("Four"));
+        mExampleList.add(new ExampleItem( "Five"));
+        mExampleList.add(new ExampleItem("Six"));
+        mExampleList.add(new ExampleItem( "Seven"));
+        mExampleList.add(new ExampleItem("Eight"));
+        mExampleList.add(new ExampleItem("Nine"));
+    }
+
+    private void buildRecyclerView() {
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new ExampleAdapter(mExampleList);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }
