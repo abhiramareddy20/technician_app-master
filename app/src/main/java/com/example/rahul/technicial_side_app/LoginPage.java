@@ -2,7 +2,10 @@ package com.example.rahul.technicial_side_app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,11 +33,15 @@ public class LoginPage extends AppCompatActivity implements AsyncLoginResponse{
     EditText username,password;
     CheckBox rememberme;
     LoadingDialog loader;
+    private ConnectivityManager connectivityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+
         initializeWidgets();
         loader=new LoadingDialog(this);
     }
@@ -50,21 +57,33 @@ public class LoginPage extends AppCompatActivity implements AsyncLoginResponse{
     public void login(View view)
     {
 
-        Toast.makeText(this, "Please check details", Toast.LENGTH_SHORT).show();
-        //startActivity(new Intent(this,HomePage.class));
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo!= null && networkInfo.isConnected()) {
 
-        //HttpReqeust request=new HttpReqeust().addUrl("http://niitbtm.com/postTest.php").addParameter("request","1");
-        //request.post(this);
-        String user=username.getText().toString();
-        String pass=password.getText().toString();
-        if(usernameVerification(user)) {
-            if (passwordVerification(pass)) {
-                new Login(this,user,pass);
-                loader.show();
+            String user = username.getText().toString();
+            String pass = password.getText().toString();
+            if (usernameVerification(user)) {
+                if (passwordVerification(pass)) {
+                    new Login(this, user, pass);
+                    loader.show();
+                    Toast.makeText(this, "Please wait", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else
+            {
+                Toast.makeText(this, "Invalid details", Toast.LENGTH_SHORT).show();
             }
         }
-        else{//showError("Username length does not match");
+
+        else{
+            informuser("No Internet Connection");
+
              }
+    }
+
+    private void informuser(String message)
+    {
+        Snackbar.make(findViewById(R.id.login),message,Snackbar.LENGTH_SHORT).show();
     }
 
     private boolean usernameVerification(String user)

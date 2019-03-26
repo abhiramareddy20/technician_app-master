@@ -59,7 +59,7 @@ public class start_service extends AppCompatActivity{
         setContentView(R.layout.activity_start_service);
 
         find = findViewById(R.id.search);
-        create = findViewById(R.id.createClient);
+        //create = findViewById(R.id.createClient);
 
 
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ){
@@ -223,9 +223,7 @@ public class start_service extends AppCompatActivity{
         startActivity(new Intent(start_service.this, QRCode.class));
     }
 
-    public void createClient(View view) {
-        startActivity(new Intent(start_service.this,CreateClient.class));
-    }
+
 
     class DownloadData extends AsyncTask<String , Void ,String>
     {

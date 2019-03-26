@@ -12,8 +12,6 @@ public class Technician_service_center_firebase_support {
 
     }
 
-
-
     public void setInProgressStatus(String currentBookingId)
     {
         this.status=1;

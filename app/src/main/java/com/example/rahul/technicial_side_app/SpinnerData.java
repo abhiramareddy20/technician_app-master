@@ -14,6 +14,7 @@ public class SpinnerData extends AppCompatActivity implements AdapterView.OnItem
 
     Spinner product,type;
     Button submit;
+    String currentStatus;
     String[] productDetails = {"With Amc","Without Amc"};
     String[] selectType     = {"UV","Ro","Ro1"};
 
@@ -26,13 +27,13 @@ public class SpinnerData extends AppCompatActivity implements AdapterView.OnItem
         type    = findViewById(R.id.amcDetails);
         submit  = findViewById(R.id.Submit);
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        /*submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SpinnerData.this, "Please collect the payment", Toast.LENGTH_SHORT).show();
+
                 //startActivity(new Intent(SpinnerData.this,Summary_page.class));
             }
-        });
+        });*/
 
         product.setOnItemSelectedListener(this);
         type.setOnItemSelectedListener(this);
@@ -48,10 +49,26 @@ public class SpinnerData extends AppCompatActivity implements AdapterView.OnItem
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        currentStatus = productDetails[position];
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
 
+    public void finishing(View view) {
+        if (currentStatus == "With Amc") {
+            Intent i = new Intent(SpinnerData.this,HomePage.class);
+            //i.putExtra("data",currentStatus);
+            startActivity(i);
+            finish();
+            Toast.makeText(this, "Please collect 6000 ", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent i = new Intent(SpinnerData.this,HomePage.class);
+            startActivity(i);
+            finish();
+            Toast.makeText(this, "PLease collect 5000", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

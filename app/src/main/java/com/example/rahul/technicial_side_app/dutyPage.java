@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,6 +90,8 @@ public class dutyPage extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
                 Intent a=new Intent(getContext(),duty_map.class);
                 Toast.makeText(getContext(),"customer id"+customers.get(i).getName(),Toast.LENGTH_SHORT).show();
                 a.putExtra("customer",customers.get(i));

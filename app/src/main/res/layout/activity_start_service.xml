@@ -120,25 +120,6 @@
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/camera"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            tools:layout_editor_absoluteX="56dp"
-            tools:layout_editor_absoluteY="155dp">
-
-            <Button
-                android:id="@+id/createClient"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Create"
-                android:textColor="@color/white"
-                android:onClick="createClient"
-                android:background="@drawable/button_border"/>
-
-
-
-        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 

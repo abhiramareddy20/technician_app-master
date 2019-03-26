@@ -62,13 +62,13 @@ public class QRCode extends AppCompatActivity implements View.OnClickListener {
 
 
                 updateFirebaseStatus();
-
+                Intent i = new Intent(QRCode.this,SpinnerData.class);
+                startActivity(i);
+                finish();
             }
         });
 
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -78,22 +78,11 @@ public class QRCode extends AppCompatActivity implements View.OnClickListener {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
             } else {
-                //if qr contains data
                 try {
-                    //converting the data to json
                     JSONObject obj = new JSONObject(result.getContents());
 
-
-                    //setting values to textviews
-/*
-                    textViewName.setText(obj.getString("name"));
-                    textViewAddress.setText(obj.getString("address"));*/
-                } catch (JSONException e) {
+        } catch (JSONException e) {
                     e.printStackTrace();
-                    //if control comes here
-                    //that means the encoded format not matches
-                    //in this case you can display whatever data is available on the qrcode
-                    //to a toast
                    textViewName.setText(result.getContents());
                     res = result.getContents();
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
@@ -111,13 +100,14 @@ public class QRCode extends AppCompatActivity implements View.OnClickListener {
 
         qrScan.initiateScan();
 
+
     }
 
     public void updateFirebaseStatus()
     {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("technician");
+        DatabaseReference myRef = database.getReference("technician").child(user.getId());
         QrResults qrResults = new QrResults(res);
         myRef.child(user.getId()).setValue(qrResults);
 
