@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class HttpReqeust {
 
-    String url="http://34.73.62.26";
+    String url="http://35.237.12.7";
 //    String url="http://192.168.43.2";
     String data;
     Map<String,Object> params;

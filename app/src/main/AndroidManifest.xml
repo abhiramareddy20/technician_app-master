@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.rahul.technicial_side_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -7,6 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -17,6 +22,8 @@
 
     <uses-feature android:name="android.hardware.location.gps" />
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +31,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Payment"></activity>
+        <activity android:name=".Feedbacks"></activity>
+        <activity android:name=".Payment" />
         <activity android:name=".BookingActivity" />
         <activity android:name=".QRCode" />
         <activity
@@ -38,6 +46,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCKrObWSq1_SI_Abkr71Rdo3pKx29KJGJM" />
+
 
         <activity
             android:name=".LoginPage"

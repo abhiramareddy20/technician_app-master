@@ -27,13 +27,13 @@ public class SpinnerData extends AppCompatActivity implements AdapterView.OnItem
         type    = findViewById(R.id.amcDetails);
         submit  = findViewById(R.id.Submit);
 
-        /*submit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //startActivity(new Intent(SpinnerData.this,Summary_page.class));
+                startActivity(new Intent(SpinnerData.this,Feedbacks.class));
             }
-        });*/
+        });
 
         product.setOnItemSelectedListener(this);
         type.setOnItemSelectedListener(this);

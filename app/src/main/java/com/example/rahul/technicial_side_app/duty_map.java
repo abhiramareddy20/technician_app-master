@@ -1,17 +1,29 @@
 package com.example.rahul.technicial_side_app;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +46,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
 public class duty_map extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     //dummy url https://maps.googleapis.com/maps/api/directions/json?origin=12.95483,77.61265&destination=12.99483,77.91265&key=AIzaSyCz3WgmlPmHucYVfVD6_nP-UAGD_UfvMHw
     //widgets
@@ -47,7 +63,15 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
     LocationManager locationManager;
     User user;
     LatLng mypos;
+    Context context;
 
+    AudioManager audioManager;
+    Recoreder recorder;
+    private SensorManager mSensorManager;
+    private Sensor myLightSensor;
+    private boolean CallState;
+    private float sensorState;
+    Recoreder recoreder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +109,7 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         street.setText(cust.getStreet());
         homeno.setText("Home no:" + cust.getHomeno());
 
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -96,6 +121,9 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + cust.getPhone()));
         startActivity(intent);
+
+        recorder=new Recoreder(this);
+        //recorder.StartRecording();
     }
 
     public void startService(View view) {
@@ -105,6 +133,7 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         Intent i = new Intent(this, otp.class);
         i.putExtra("customer", cust);
         startActivity(i);
+
     }
 
     @Override
@@ -117,9 +146,7 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         Log.e("Map", "Loading data to map");
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(customerLocation, 15));
 
-
     }
-
 
     int location_triggers = 0;
 
@@ -168,16 +195,12 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
             }
         }
 
-
-
     }
-
-
 
     //FUNCTIONS RELATED TO FETCHING OF USERS CURRENT LOCATIOIN STARTS OVER HERE
     @Override
     public void onLocationChanged(Location location) {
-         mypos=new LatLng(location.getLatitude(),location.getLongitude());
+        mypos=new LatLng(location.getLatitude(),location.getLongitude());
         LatLng dest=new LatLng(cust.getLat(),cust.getLng());
         if(mapHelper.fromLocation==null)
         {
@@ -188,7 +211,7 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         else
         {
 
-           // mapHelper.updateMarkerPosition(mapHelper.source,pos);
+            // mapHelper.updateMarkerPosition(mapHelper.source,pos);
         }
     }
 
@@ -209,7 +232,6 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
 
     //FUNCTIONS RELATED TO FETCHING OF USERS CURRENT LOCATION ENDS OVER HERE
 
-
     public void updateFirebaseStatus()
     {
         // Write a message to the database
@@ -227,6 +249,13 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         mapHelper.createMap(this.googleMap,mypos,dest);
         mapHelper.displayRoute();
     }
+
+    public void FeedBack(View view) {
+
+        startActivity(new Intent(duty_map.this,Feedbacks.class));
+    }
+
+
 }
 
 

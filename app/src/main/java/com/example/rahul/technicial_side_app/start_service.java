@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 //7026606333
 public class start_service extends AppCompatActivity{
 
-    private Button find,create;
+    private Button feedback,createclient;
     public static final int REQUEST_CODE_QR_SCAN = 100;
     public static final int PERMISSION_REQUEST = 200;
     int minutes=0,seconds=0;
@@ -58,7 +58,8 @@ public class start_service extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_service);
 
-        find = findViewById(R.id.search);
+        createclient = findViewById(R.id.search);
+        feedback     = findViewById(R.id.Feedbacks);
         //create = findViewById(R.id.createClient);
 
 
@@ -154,13 +155,13 @@ public class start_service extends AppCompatActivity{
             myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
             myAudioRecorder.setOutputFile(outputFile);
-            //startRecording();
+            startRecording();
         }
 
 
     }
 
-    /*public void startRecording()
+    public void startRecording()
     {
         Log.e("recording","starting recording");
         try {
@@ -173,8 +174,7 @@ public class start_service extends AppCompatActivity{
             e.printStackTrace();
         }
     }
-*/
-    /*public void stopRecording()
+    public void stopRecording()
     {
         Log.e("recording","recording stopped");
         try{
@@ -186,14 +186,14 @@ public class start_service extends AppCompatActivity{
         catch (Exception e){
             e.printStackTrace();
         }
-    }*/
+    }
 
     public void stopService(View view)
     {
-        Intent i=new Intent(this,Summary_page.class);
-        i.putExtra("customer",customer);
+        /*Intent i=new Intent(this,Summary_page.class);
+        //i.putExtra("customer",customer);
         startActivity(i);
-
+*/
 
     }
 
@@ -210,7 +210,7 @@ public class start_service extends AppCompatActivity{
 
             Toast.makeText(getApplicationContext(),"File successfully uploaded to "+a,Toast.LENGTH_LONG).show();
 
-           // new DownloadData().execute(new String[]{url});
+           new DownloadData().execute(new String[]{url});
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -219,10 +219,14 @@ public class start_service extends AppCompatActivity{
         }
     }
 
-    public void search(View view) {
-        startActivity(new Intent(start_service.this, QRCode.class));
+    public void create(View view) {
+        startActivity(new Intent(start_service.this, CreateClient.class));
     }
 
+    public void feed(View view) {
+
+        startActivity(new Intent(start_service.this,Feedbacks.class));
+    }
 
 
     class DownloadData extends AsyncTask<String , Void ,String>
