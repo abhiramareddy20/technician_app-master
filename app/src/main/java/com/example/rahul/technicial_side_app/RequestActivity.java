@@ -9,16 +9,31 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import static java.security.AccessController.getContext;
 
-public class RequestActivity extends AppCompatActivity  {
+public class RequestActivity extends AppCompatActivity {
+
+    private static final String JSON_URL = "http://192.168.1.34:8080/data/";
 
     private ArrayList<ExampleItem> mExampleList;
 
@@ -69,6 +84,7 @@ public class RequestActivity extends AppCompatActivity  {
     }
 
     private void createExampleList() {
+
         mExampleList = new ArrayList<>();
         mExampleList.add(new ExampleItem( "One"));
         mExampleList.add(new ExampleItem( "Two"));
@@ -79,7 +95,7 @@ public class RequestActivity extends AppCompatActivity  {
         mExampleList.add(new ExampleItem( "Seven"));
         mExampleList.add(new ExampleItem("Eight"));
         mExampleList.add(new ExampleItem("Nine"));
-    }
+}
 
     private void buildRecyclerView() {
         mRecyclerView = findViewById(R.id.recyclerView);

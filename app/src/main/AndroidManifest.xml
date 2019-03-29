@@ -22,6 +22,7 @@
 
     <uses-feature android:name="android.hardware.location.gps" />
 
+    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
 
     <application
@@ -50,7 +51,7 @@
 
         <activity
             android:name=".LoginPage"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

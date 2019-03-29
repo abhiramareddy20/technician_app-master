@@ -119,11 +119,11 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
 
     public void makeCall(View view) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + cust.getPhone()));
+        //intent.setData(Uri.parse("tel:" + cust.getPhone()));
         startActivity(intent);
 
-        recorder=new Recoreder(this);
-        //recorder.StartRecording();
+        recoreder = new Recoreder(this);
+
     }
 
     public void startService(View view) {

@@ -1,5 +1,6 @@
 package com.example.rahul.technicial_side_app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     private ArrayList<ExampleItem> mExampleList;
 
 
+    public ExampleAdapter(ArrayList<ExampleItem> ExampleList) {
+        mExampleList = ExampleList;
+    }
+
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView1;
@@ -31,9 +36,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         }
     }
 
-    public ExampleAdapter(ArrayList<ExampleItem> exampleList) {
-        mExampleList = exampleList;
-    }
 
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
