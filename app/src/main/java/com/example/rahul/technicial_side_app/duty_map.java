@@ -18,8 +18,8 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +31,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpResponse;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.rahul.technicial_side_app.DataTypes.Customer;
 import com.example.rahul.technicial_side_app.DataTypes.Technician_service_center_firebase_support;
 import com.example.rahul.technicial_side_app.DataTypes.User;
@@ -46,11 +54,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.http.HttpConnection;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class duty_map extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+
     //dummy url https://maps.googleapis.com/maps/api/directions/json?origin=12.95483,77.61265&destination=12.99483,77.91265&key=AIzaSyCz3WgmlPmHucYVfVD6_nP-UAGD_UfvMHw
     //widgets
     TextView name, street, homeno, phone, problem;
@@ -72,11 +91,13 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
     private boolean CallState;
     private float sensorState;
     Recoreder recoreder;
+    String sdpath,sd1path,usbdiskpath,sd0path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duty_map);
+
         cust = (Customer) getIntent().getSerializableExtra("customer");
         user = new Gson().fromJson(getSharedPreferences("technician_side_app", MODE_PRIVATE).getString("jsonUser", ""), User.class);
         customerLocation = new LatLng(cust.getLat(), cust.getLng());
@@ -88,12 +109,11 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(duty_map.this,HomePage.class);
+                Intent i = new Intent(duty_map.this, HomePage.class);
                 startActivity(i);
                 finish();
             }
         });
-
     }
 
     final int MY_PERMISSIONS_REQUEST_LOCATION = 3213;
@@ -109,31 +129,87 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         street.setText(cust.getStreet());
         homeno.setText("Home no:" + cust.getHomeno());
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
-
 
     public void makeCall(View view) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         //intent.setData(Uri.parse("tel:" + cust.getPhone()));
         startActivity(intent);
-
-        recoreder = new Recoreder(this);
-
     }
 
     public void startService(View view) {
+//        String url = "http://35.237.12.7/uploadAudioService/";
 
         new uploadCustomersNewLocation(mypos, cust.getId());
         //Intent i=new Intent(this,start_service.class);
+        File sdcard = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+//Get the text file
+        File file = new File(sdcard,"myfile");
+        uploadFile(file,cust.getId());
+
         Intent i = new Intent(this, otp.class);
         i.putExtra("customer", cust);
         startActivity(i);
+    }
 
+    String url="http://35.237.12.7/uploadAudioService/";
+    private  void uploadFile(File file_url, String bookingId)
+    {
+        File f=new File(String.valueOf(file_url));
+        try {
+            MultipartUploadRequest obb=new MultipartUploadRequest(getApplication(),"123",url);
+
+            obb.addParameter("booking_id",bookingId);
+            obb.addFileToUpload(f.getPath(),"myfile");
+            String a= obb.startUpload();
+
+            Toast.makeText(getApplicationContext(),"File successfully uploaded to "+a,Toast.LENGTH_LONG).show();
+
+            new DownloadData().execute(new String[]{url});
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class DownloadData extends AsyncTask<String , Void ,String>
+    {
+        @Override
+        protected String doInBackground(String... strings) {
+            DownloadUrl download=new DownloadUrl();
+            try {
+                Log.e("datadownload","started download process");
+                String text=download.readUrl(strings[0]);
+                return text;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "Some exception occured";
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("datadownloader","downloading complete");
+            Log.e("datadownloader","downloaded data is "+s);
+            downloadComplete(s);
+
+        }
+    }
+
+    void downloadComplete(String text)
+    {
+        //JsonDecoder decoder=new JsonDecoder();
+        //imageDescription=decoder.decode(text);
+        //output.setText(text);
+        //say(imageDescription);
+        Log.e("download return",text+" is the output returned");
     }
 
     @Override
@@ -145,7 +221,6 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
                 .title("Marker in Sydney"));
         Log.e("Map", "Loading data to map");
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(customerLocation, 15));
-
     }
 
     int location_triggers = 0;
@@ -173,9 +248,8 @@ public class duty_map extends AppCompatActivity implements OnMapReadyCallback, L
         Log.e("Location trigger", "location trigger occured" + location_triggers);
     }
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,  String[] permissions,  int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 Intent gpsOptionsIntent = new Intent(

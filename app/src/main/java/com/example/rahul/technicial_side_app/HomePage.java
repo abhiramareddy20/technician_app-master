@@ -331,6 +331,11 @@ public class HomePage extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         myPos=new LatLng(location.getLatitude(),location.getLongitude());
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("technician");
+        customerlocation loc = new customerlocation(myPos);
+        myRef.child(user.getId()).setValue(loc);
+
         Log.e("Location fetched","location fetched");
         if(customers!=null && !isDistanceDataFromGooleDownloaded)
         {

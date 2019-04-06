@@ -113,7 +113,7 @@ public class start_service extends AppCompatActivity{
             myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
             myAudioRecorder.setOutputFile(outputFile);
-            //startRecording();
+            startRecording();
         }
 
 
@@ -190,6 +190,7 @@ public class start_service extends AppCompatActivity{
 
     public void stopService(View view)
     {
+        //stopRecording();
         /*Intent i=new Intent(this,Summary_page.class);
         //i.putExtra("customer",customer);
         startActivity(i);
@@ -197,7 +198,7 @@ public class start_service extends AppCompatActivity{
 
     }
 
-    String url="http://192.168.43.2/uploadAudioService/";
+    String url="http://35.237.12.7/uploadAudioService/";
     private  void uploadFile(String file_url,String bookingId)
     {
         File f=new File(file_url);
@@ -220,6 +221,7 @@ public class start_service extends AppCompatActivity{
     }
 
     public void create(View view) {
+        stopRecording();
         startActivity(new Intent(start_service.this, CreateClient.class));
     }
 
@@ -227,7 +229,6 @@ public class start_service extends AppCompatActivity{
 
         startActivity(new Intent(start_service.this,Feedbacks.class));
     }
-
 
     class DownloadData extends AsyncTask<String , Void ,String>
     {
@@ -276,6 +277,5 @@ public class start_service extends AppCompatActivity{
         User user=new User().loadUserFromMemory(this);
         myRef.child(user.getId()).setValue(tech_service);
     }
-
 
 }

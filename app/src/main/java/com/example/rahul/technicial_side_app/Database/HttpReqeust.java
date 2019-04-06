@@ -28,7 +28,6 @@ public class HttpReqeust {
     Activity activity;
     AsyncResponse responseActivity;
 
-
         public HttpReqeust()
         {
              params= new LinkedHashMap<>();
@@ -53,7 +52,6 @@ public class HttpReqeust {
         }
 
 
-
         public void post(AsyncResponse activity)
         {
             responseActivity=activity;
@@ -73,6 +71,7 @@ public class HttpReqeust {
                 postData.append('=');
                 postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
             }
+
             byte[] postDataBytes = postData.toString().getBytes("UTF-8");
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -91,11 +90,13 @@ public class HttpReqeust {
             Log.e("HTTP Request", response);
             return response;
         }
+
         catch(Exception e)
         {
             Log.e("HttpRequest","exception occured"+e.getMessage());
 
         }
+
         return "{\"result\":\"fail\",\"description\":\"Internal error\"}";
         }
 
